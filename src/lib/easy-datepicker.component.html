@@ -1,0 +1,38 @@
+<mat-form-field class="full-width" [appearance]="appearance">
+  <mat-label class="mat-label">{{ label }}</mat-label>
+  <input
+    id="date-picker-{{ mode }}-{{ rundomId }}"
+    matInput
+    class="date-picker-input"
+    readonly
+    [min]="minDate"
+    [max]="maxDate"
+    [matDatepicker]="datepicker"
+    (click)="datepicker.open(); removeButton()"
+    [formControl]="dateControl"
+    [placeholder]="placeholder"
+    [required]="required"
+  />
+  <mat-datepicker-toggle
+    matSuffix
+    [for]="datepicker"
+    (click)="removeButton()"
+  ></mat-datepicker-toggle>
+</mat-form-field>
+<mat-datepicker
+  #datepicker
+  dir="ltr"
+  startView="multi-year"
+  [yPosition]="'below'"
+  (yearSelected)="
+    mode === 'YEAR' ? chosenYearHandler($event, datepicker) : null
+  "
+  (monthSelected)="
+    mode === 'MONTHYEAR' ? chosenMonthYeartHandler($event, datepicker) : null
+  "
+  (closed)="
+    mode === 'FULLDATE'
+      ? chosenDateHandler(dateControl.value, datepicker)
+      : null
+  "
+></mat-datepicker>
