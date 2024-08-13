@@ -1,22 +1,21 @@
-import { DOCUMENT } from '@angular/common';
-import { FormControl } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { DOCUMENT } from "@angular/common";
+import { FormControl } from "@angular/forms";
+import { MatDatepicker } from "@angular/material/datepicker";
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
-} from '@angular/material/core';
+} from "@angular/material/core";
 import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
   MomentDateAdapter,
-} from '@angular/material-moment-adapter';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
+} from "@angular/material-moment-adapter";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatInputModule } from "@angular/material/input";
 
 import {
-  AfterViewChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -27,24 +26,30 @@ import {
   OnInit,
   Output,
   ViewChild,
-} from '@angular/core';
+} from "@angular/core";
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'DD/MM/YYYY',
+    dateInput: "DD/MM/YYYY",
   },
   display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
+    dateInput: "DD/MM/YYYY",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY",
   },
 };
 
 @Component({
-  selector: 'easy-datepicker',
-  templateUrl: './easy-datepicker.component.html',
-  styles: '',
+  selector: "easy-datepicker",
+  templateUrl: "./easy-datepicker.component.html",
+  styles: [
+    `
+      input {
+        cursor: pointer !important;
+      }
+    `,
+  ],
   providers: [
     {
       provide: DateAdapter,
@@ -63,15 +68,15 @@ export const MY_FORMATS = {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
+export class EasyDatepicker implements OnInit, AfterViewInit {
   @Input() value?: Date;
   @Input() min?: Date;
   @Input() max?: Date;
   @Input() disabled: boolean = false;
-  @Input() mode: 'YEAR' | 'MONTHYEAR' | 'FULLDATE' = 'FULLDATE';
-  @Input() appearance: 'outline' | 'fill' = 'outline';
-  @Input() placeholder: string = '';
-  @Input() label: string = 'Date';
+  @Input() mode: "YEAR" | "MONTHYEAR" | "FULLDATE" = "FULLDATE";
+  @Input() appearance: "outline" | "fill" = "outline";
+  @Input() placeholder: string = "";
+  @Input() label: string = "Date";
   @Input() required: boolean = false;
   @Output() dateChange: EventEmitter<Date> = new EventEmitter<Date>();
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date> | undefined;
@@ -79,8 +84,7 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
   public minDate?: Date;
   public maxDate?: Date;
   public dateControl: FormControl;
-  public startView = 'multi-year';
-  public currentPep: any;
+  public startView = "multi-year";
   public rundomId = Math.floor(Math.random() * 1000000);
 
   constructor(
@@ -98,41 +102,18 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
     }, 100);
   }
 
-  ngAfterViewChecked() {
-    // for automated tests QA
-    if (this.datepicker?.opened) {
-      // add id attribute to earch year cell, value is the year itself, using ViewChildren
-      const yearCells = this.document.querySelectorAll(
-        '.mat-calendar-body-cell-content'
-      );
-      const yearCellsArray = Array.from(yearCells);
-      // iterate over nodelist
-      for (const element of yearCellsArray) {
-        let yearCell = element;
-        let year = yearCell.textContent;
-        if (year) {
-          // add id attribute to each year cell
-          yearCell.setAttribute(
-            'id',
-            `${this.currentPep?.name}-datepicker-year-${year.trim()}`
-          );
-        }
-      }
-    }
-  }
-
   // remove calendar period button if mode specified
   public removeButton() {
     if (this.mode) {
       setTimeout(() => {
         const calendarPeriodButton = document.querySelector(
-          '.mat-calendar-period-button'
+          ".mat-calendar-period-button"
         ) as HTMLElement;
         const matCalendarArrow = document.querySelector(
-          '.mat-calendar-arrow'
+          ".mat-calendar-arrow"
         ) as HTMLElement;
-        calendarPeriodButton.style.pointerEvents = 'none';
-        matCalendarArrow.style.display = 'none';
+        calendarPeriodButton.style.pointerEvents = "none";
+        matCalendarArrow.style.display = "none";
       }, 20);
     }
   }
@@ -141,9 +122,9 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
     date?: Moment,
     datepicker?: MatDatepicker<Date>
   ): void {
-    if (this.mode === 'YEAR' && date) {
-      MY_FORMATS['parse'].dateInput = 'YYYY';
-      MY_FORMATS['display'].dateInput = 'YYYY';
+    if (this.mode === "YEAR" && date) {
+      MY_FORMATS["parse"].dateInput = "YYYY";
+      MY_FORMATS["display"].dateInput = "YYYY";
       this.dateControl.setValue(date._d);
       if (datepicker) {
         datepicker.close();
@@ -156,9 +137,9 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
     date: Moment,
     datepicker?: MatDatepicker<Date>
   ): void {
-    if (this.mode === 'MONTHYEAR' && datepicker) {
-      MY_FORMATS['parse'].dateInput = 'MM/YYYY';
-      MY_FORMATS['display'].dateInput = 'MM/YYYY';
+    if (this.mode === "MONTHYEAR" && datepicker) {
+      MY_FORMATS["parse"].dateInput = "MM/YYYY";
+      MY_FORMATS["display"].dateInput = "MM/YYYY";
       this.dateControl.setValue(date._d);
       datepicker.close();
       this.dateChange.emit(date._d);
@@ -169,12 +150,14 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
     date: Moment,
     datepicker?: MatDatepicker<Date>
   ): void {
-    if (this.mode === 'FULLDATE' && date && datepicker) {
-      MY_FORMATS['parse'].dateInput = 'DD/MM/YYYY';
-      MY_FORMATS['display'].dateInput = 'DD/MM/YYYY';
+    if (this.mode === "FULLDATE" && date && datepicker) {
+      MY_FORMATS["parse"].dateInput = "DD/MM/YYYY";
+      MY_FORMATS["display"].dateInput = "DD/MM/YYYY";
       this.dateControl.setValue(date._d);
       datepicker.close();
-      this.dateChange.emit(date._d);
+      if (this.value !== date._d) {
+        this.dateChange.emit(date._d);
+      }
     }
   }
 
@@ -204,7 +187,7 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
     }
 
     if (this.mode === null) {
-      this.mode = 'FULLDATE';
+      this.mode = "FULLDATE";
     }
 
     this._cdRef.detectChanges();
@@ -215,21 +198,21 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
 
   private _setValueToDatePicker(): void {
     if (this.value) {
-      const dateFormat = 'YYYYMMDD';
+      const dateFormat = "YYYYMMDD";
       switch (this.mode) {
-        case 'FULLDATE':
+        case "FULLDATE":
           this.chosenDateHandler(
             this._convertDateToMoment(this.value, dateFormat),
             this.datepicker
           );
           break;
-        case 'YEAR':
+        case "YEAR":
           this.chosenYearHandler(
             this._convertDateToMoment(this.value, dateFormat),
             this.datepicker
           );
           break;
-        case 'MONTHYEAR':
+        case "MONTHYEAR":
           this.chosenMonthYeartHandler(
             this._convertDateToMoment(this.value, dateFormat),
             this.datepicker
@@ -243,7 +226,7 @@ export class EasyDatepicker implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   private _convertDateToMoment(date: Date, format: string): Moment {
-    if (typeof date === 'string') {
+    if (typeof date === "string") {
       date = new Date(date);
     }
 
