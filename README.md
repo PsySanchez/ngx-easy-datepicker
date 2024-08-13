@@ -1,24 +1,44 @@
-# NgxEasyDatepicker
+# ngx-easy-datepicker
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.0.
+ngx-easy-datepicker is a lightweight, user-friendly Angular datepicker component built on top of Angular Material. It offers a clean and intuitive interface for selecting dates, making it easy for users to input date values in your Angular applications.
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name --project ngx-easy-datepicker` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-easy-datepicker`.
-> Note: Don't forget to add `--project ngx-easy-datepicker` or else it will be added to the default project in your `angular.json` file. 
+```bash
+npm install ngx-easy-datepicker
+```
 
-## Build
+## Usage
 
-Run `ng build ngx-easy-datepicker` to build the project. The build artifacts will be stored in the `dist/` directory.
+```typescript
+import { EasyDatepicker } from 'ngx-easy-datepicker';
 
-## Publishing
+// In your app.module.ts
+@NgModule({
+  imports: [
+    EasyDatepicker
+  ],
+  // ...
+})
+export class AppModule {}
 
-After building your library with `ng build ngx-easy-datepicker`, go to the dist folder `cd dist/ngx-easy-datepicker` and run `npm publish`.
+// In your component template
+<easy-datepicker [(ngModel)]="selectedDate"></easy-datepicker>
+```
 
-## Running unit tests
+## Options
 
-Run `ng test ngx-easy-datepicker` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```markdown
+| Option           | Type      | Mandatory | Description                                                                                   |
+| ---------------- | --------- | --------- | --------------------------------------------------------------------------------------------- |
+| initialDate      | Date      | false     | Sets the initial date.                                                                        |
+| min              | Date      | false     | Specifies the earliest selectable date.                                                       |
+| max              | Date      | false     | Defines the latest selectable date (by default 120 years).                                    |
+| disabled         | boolean   | false     | Disables the datepicker.                                                                      |
+| mode             | string    | false     | Controls the level of detail displayed in the datepicker ("YEAR" | "MONTHYEAR" | "FULLDATE"). |
+| appearance       | string    | false     | Determines the visual style of the datepicker ("outline" | "fill").                           |
+| placeholder      | string    | false     | Sets the placeholder text displayed when no date is selected.                                 |
+| label            | string    | false     | Provides a label for the datepicker field.                                                    |
+| required         | boolean   | false     | Makes the datepicker field mandatory.                                                         |
+| dateChange       | EventEmitter<Date>    |  Emits an event when the selected date changes.                                               |
+```

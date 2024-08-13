@@ -1,12 +1,26 @@
 {
   "name": "ngx-easy-datepicker",
   "version": "0.0.1",
+  "author": "Alex Voronin <alex.varonin@gmail.com>",
+  "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.1.0",
     "@angular/core": "^18.1.0"
   },
+  "description": "A Simplified Angular Datepicker.",
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "module": "fesm2022/ngx-easy-datepicker.mjs",
+  "typings": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PsySanchez/ngx-easy-datepicker.git"
+  },
+  "keywords": [
+    "datepicker",
+    "angular",
+    "ngx"
+  ]
 }

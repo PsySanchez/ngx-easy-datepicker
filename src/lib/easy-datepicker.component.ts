@@ -1,4 +1,3 @@
-import { DOCUMENT } from "@angular/common";
 import { FormControl } from "@angular/forms";
 import { MatDatepicker } from "@angular/material/datepicker";
 import {
@@ -21,7 +20,6 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Inject,
   Input,
   OnInit,
   Output,
@@ -69,7 +67,7 @@ export const MY_FORMATS = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EasyDatepicker implements OnInit, AfterViewInit {
-  @Input() value?: Date;
+  @Input() initialDate?: Date;
   @Input() min?: Date;
   @Input() max?: Date;
   @Input() disabled: boolean = false;
@@ -87,10 +85,7 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
   public startView = "multi-year";
   public rundomId = Math.floor(Math.random() * 1000000);
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private _cdRef: ChangeDetectorRef
-  ) {
+  constructor(private _cdRef: ChangeDetectorRef) {
     this.dateControl = new FormControl();
   }
 
@@ -155,7 +150,7 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
       MY_FORMATS["display"].dateInput = "DD/MM/YYYY";
       this.dateControl.setValue(date._d);
       datepicker.close();
-      if (this.value !== date._d) {
+      if (this.initialDate !== date._d) {
         this.dateChange.emit(date._d);
       }
     }
@@ -197,24 +192,24 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
   }
 
   private _setValueToDatePicker(): void {
-    if (this.value) {
+    if (this.initialDate) {
       const dateFormat = "YYYYMMDD";
       switch (this.mode) {
         case "FULLDATE":
           this.chosenDateHandler(
-            this._convertDateToMoment(this.value, dateFormat),
+            this._convertDateToMoment(this.initialDate, dateFormat),
             this.datepicker
           );
           break;
         case "YEAR":
           this.chosenYearHandler(
-            this._convertDateToMoment(this.value, dateFormat),
+            this._convertDateToMoment(this.initialDate, dateFormat),
             this.datepicker
           );
           break;
         case "MONTHYEAR":
           this.chosenMonthYeartHandler(
-            this._convertDateToMoment(this.value, dateFormat),
+            this._convertDateToMoment(this.initialDate, dateFormat),
             this.datepicker
           );
           break;
