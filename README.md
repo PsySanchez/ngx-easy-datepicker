@@ -11,19 +11,27 @@ npm install ngx-easy-datepicker
 ## Usage
 
 ```typescript
+import { Component } from '@angular/core';
 import { EasyDatepicker } from 'ngx-easy-datepicker';
 
-// In your app.module.ts
-@NgModule({
-  imports: [
-    EasyDatepicker
-  ],
-  // ...
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [EasyDatepicker],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
 })
-export class AppModule {}
+export class AppComponent {
+  title = 'my-project';
 
-// In your component template
-<easy-datepicker [(ngModel)]="selectedDate"></easy-datepicker>
+  onDateChange(date: Date) {
+    console.log('Selected date:', date);
+  }
+}
+
+
+// In your component template app.component.html
+<easy-datepicker (dateChange)="onDateChange($event)"></easy-datepicker>
 ```
 
 ## Options
