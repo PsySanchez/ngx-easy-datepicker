@@ -21,12 +21,13 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from "@angular/core";
 
-export const MY_FORMATS = {
+const MY_FORMATS = {
   parse: {
     dateInput: "DD/MM/YYYY",
   },
@@ -37,6 +38,17 @@ export const MY_FORMATS = {
     monthYearA11yLabel: "MMMM YYYY",
   },
 };
+
+interface Moment {
+  _d: Date;
+  _f: string;
+  _isAMomentObject: boolean;
+  _isUTC: boolean;
+  _isValid: boolean;
+  _locale: any;
+  _offset: number;
+  _pf: any;
+}
 
 @Component({
   selector: "easy-datepicker",
@@ -66,7 +78,7 @@ export const MY_FORMATS = {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EasyDatepicker implements OnInit, AfterViewInit {
+export class EasyDatepicker implements OnInit, AfterViewInit, OnDestroy {
   @Input() initialDate?: Date;
   @Input() min?: Date;
   @Input() max?: Date;
@@ -82,8 +94,13 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
   public minDate?: Date;
   public maxDate?: Date;
   public dateControl: FormControl;
-  public startView = "multi-year";
+  public startView: "month" | "year" | "multi-year" = "multi-year";
   public rundomId = Math.floor(Math.random() * 1000000);
+
+  private timeOut: any = {
+    ngAfterViewInit: null,
+    removeButton: null,
+  };
 
   constructor(private _cdRef: ChangeDetectorRef) {
     this.dateControl = new FormControl();
@@ -92,38 +109,34 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
+    this.timeOut.ngAfterViewInit = setTimeout(() => {
       this._setParametersToDatepicker();
-    }, 100);
+    }, 20);
   }
 
   // remove calendar period button if mode specified
   public removeButton() {
-    if (this.mode) {
-      setTimeout(() => {
-        const calendarPeriodButton = document.querySelector(
-          ".mat-calendar-period-button"
-        ) as HTMLElement;
-        const matCalendarArrow = document.querySelector(
-          ".mat-calendar-arrow"
-        ) as HTMLElement;
-        calendarPeriodButton.style.pointerEvents = "none";
-        matCalendarArrow.style.display = "none";
-      }, 20);
-    }
+    this.timeOut.removeButton = setTimeout(() => {
+      const calendarPeriodButton = document.querySelector(
+        ".mat-calendar-period-button"
+      ) as HTMLElement;
+      const matCalendarArrow = document.querySelector(
+        ".mat-calendar-arrow"
+      ) as HTMLElement;
+      calendarPeriodButton.style.pointerEvents = "none";
+      matCalendarArrow.style.display = "none";
+    }, 20);
   }
 
   public chosenYearHandler(
     date?: Moment,
     datepicker?: MatDatepicker<Date>
   ): void {
-    if (this.mode === "YEAR" && date) {
+    if (this.mode === "YEAR" && date && datepicker) {
       MY_FORMATS["parse"].dateInput = "YYYY";
       MY_FORMATS["display"].dateInput = "YYYY";
       this.dateControl.setValue(date._d);
-      if (datepicker) {
-        datepicker.close();
-      }
+      datepicker.close();
       this.dateChange.emit(date._d);
     }
   }
@@ -145,14 +158,13 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
     date: Moment,
     datepicker?: MatDatepicker<Date>
   ): void {
+    if (this.initialDate === date?._d) return;
+    
     if (this.mode === "FULLDATE" && date && datepicker) {
       MY_FORMATS["parse"].dateInput = "DD/MM/YYYY";
       MY_FORMATS["display"].dateInput = "DD/MM/YYYY";
       this.dateControl.setValue(date._d);
-      datepicker.close();
-      if (this.initialDate !== date._d) {
-        this.dateChange.emit(date._d);
-      }
+      this.dateChange.emit(date._d);
     }
   }
 
@@ -179,10 +191,6 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
         currentMonth,
         currentDate
       );
-    }
-
-    if (this.mode === null) {
-      this.mode = "FULLDATE";
     }
 
     this._cdRef.detectChanges();
@@ -236,15 +244,9 @@ export class EasyDatepicker implements OnInit, AfterViewInit {
       _pf: {},
     };
   }
-}
 
-interface Moment {
-  _d: Date;
-  _f: string;
-  _isAMomentObject: boolean;
-  _isUTC: boolean;
-  _isValid: boolean;
-  _locale: any;
-  _offset: number;
-  _pf: any;
+  ngOnDestroy(): void {
+    clearTimeout(this.timeOut.ngAfterViewInit);
+    clearTimeout(this.timeOut.removeButton);
+  }
 }

@@ -22,7 +22,7 @@
 <mat-datepicker
   #datepicker
   dir="ltr"
-  startView="multi-year"
+  [startView]="startView"
   [yPosition]="'below'"
   (yearSelected)="
     mode === 'YEAR' ? chosenYearHandler($event, datepicker) : null
