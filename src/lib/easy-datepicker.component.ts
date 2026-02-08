@@ -51,32 +51,31 @@ interface Moment {
 }
 
 @Component({
-  selector: "easy-datepicker",
-  templateUrl: "./easy-datepicker.component.html",
-  styles: [
-    `
+    selector: "easy-datepicker",
+    templateUrl: "./easy-datepicker.component.html",
+    styles: [
+        `
       input {
         cursor: pointer !important;
       }
     `,
-  ],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  ],
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    ],
+    providers: [
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+        },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    ],
+    imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EasyDatepicker implements OnInit, AfterViewInit, OnDestroy {
   @Input() initialDate?: Date;

@@ -1,19 +1,26 @@
 {
   "name": "ngx-easy-datepicker",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Alex Voronin <alex.varonin@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^18.1.0",
-    "@angular/core": "^18.1.0",
-    "@angular/material": "^18.1.0",
-    "@angular/material-moment-adapter": "^18.1.0"
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0",
+    "@angular/material": "^19.0.0",
+    "@angular/material-moment-adapter": "^19.0.0"
   },
   "description": "A Simplified Angular Datepicker.",
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
+    "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./fesm2022/ngx-easy-datepicker.mjs",
+      "default": "./fesm2022/ngx-easy-datepicker.mjs"
+    }
+  },
   "module": "fesm2022/ngx-easy-datepicker.mjs",
   "typings": "index.d.ts",
   "repository": {
